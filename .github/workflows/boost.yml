@@ -52,6 +52,7 @@ jobs:
         uses: boostsecurityio/boostsec-scanner-github@v4
         env:
           BOOST_SCANNER_REGISTRY_REPO: https://github.com/boostsecurityio/dev-registry.git#BST-17782
+          BOOST_IMAGE_NAME: ubuntu:latest
         with:
           registry_module: boostsecurityio/trivy-image
           api_token: ${{ secrets.BOOST_API_TOKEN }}
@@ -61,6 +62,7 @@ jobs:
         uses: boostsecurityio/boostsec-scanner-github@v4
         env:
           BOOST_SCANNER_REGISTRY_REPO: https://github.com/boostsecurityio/dev-registry.git#BST-17782
+          BOOST_IMAGE_NAME: ubuntu:latest
         with:
           registry_module: boostsecurityio/trivy-image-sbom
           api_token: ${{ secrets.BOOST_API_TOKEN }}
