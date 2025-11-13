@@ -20,4 +20,12 @@ jobs:
           registry_module: boostsecurityio/composition
           api_token: ${{ secrets.BOOST_API_TOKEN }}
           api_endpoint: https://api.dev.boostsec.io
-  
+      - name: SCI
+        if: github.event_name != 'pull_request'
+        uses: boostsecurityio/boostsec-scanner-github@v4
+        env:
+          BOOST_SCANNER_REGISTRY_REPO: https://github.com/boostsecurityio/dev-registry.git#BST-17782
+        with:
+          registry_module: boostsecurityio/supply-chain-inventory
+          api_token: ${{ secrets.BOOST_API_TOKEN }}
+          api_endpoint: https://api.dev.boostsec.io
