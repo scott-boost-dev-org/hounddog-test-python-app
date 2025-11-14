@@ -18,7 +18,7 @@ workflows:
   ci:
     jobs:
       - build-push:
-          context: [boost-api-prod]
+          context: [potato]
 
 jobs:
   build-push:
