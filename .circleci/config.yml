@@ -17,14 +17,16 @@ workflows:
   version: 2
   ci:
     jobs:
-      - build-push:
+      - composition-scan:
           context: [potato]
+      # - trivy-scan:
+      #     context: [potato]
 
 jobs:
-  build-push:
+  composition-scan:
     executor: default
     environment:
-      BOOST_SCANNER_REGISTRY_REPO: "https://github.com/boostsecurityio/dev-registry.git"
+      BOOST_SCANNER_REGISTRY_REPO: "https://github.com/boostsecurityio/dev-registry.git#BST-17782"
       BOOST_IMAGE_NAME: "mongo:latest"
     steps:
       - checkout
@@ -34,17 +36,35 @@ jobs:
               - equal: [ main, << pipeline.git.branch >> ]
           steps:
             - boost-security-scanner/scan:
-                registry_module: boostsecurityio/trivy-sbom-image
+                registry_module: boostsecurityio/composition
                 api_endpoint: "https://api.dev.boostsec.io"
             - boost-security-scanner/scan:
-                registry_module: boostsecurityio/trivy-image
+                registry_module: boostsecurityio/supply-chain-inventory
                 api_endpoint: "https://api.dev.boostsec.io"
-            - boost-security-scanner/scan:
-                registry_module: boostsecurityio/trivy-sbom
-                api_endpoint: "https://api.dev.boostsec.io"
-            - boost-security-scanner/scan:
-                registry_module: boostsecurityio/trivy-fs
-                api_endpoint: "https://api.dev.boostsec.io"
-            - boost-security-scanner/scan:
-                registry_module: boostsecurityio/boost-sca
-                api_endpoint: "https://api.dev.boostsec.io"
+  # trivy-scan:
+  #   executor: default
+  #   environment:
+  #     BOOST_SCANNER_REGISTRY_REPO: "https://github.com/boostsecurityio/dev-registry.git"
+  #     BOOST_IMAGE_NAME: "mongo:latest"
+  #   steps:
+  #     - checkout
+  #     - when:
+  #         condition:
+  #           or:
+  #             - equal: [ main, << pipeline.git.branch >> ]
+  #         steps:
+            # - boost-security-scanner/scan:
+            #     registry_module: boostsecurityio/trivy-sbom-image
+            #     api_endpoint: "https://api.dev.boostsec.io"
+            # - boost-security-scanner/scan:
+            #     registry_module: boostsecurityio/trivy-image
+            #     api_endpoint: "https://api.dev.boostsec.io"
+            # - boost-security-scanner/scan:
+            #     registry_module: boostsecurityio/trivy-sbom
+            #     api_endpoint: "https://api.dev.boostsec.io"
+            # - boost-security-scanner/scan:
+            #     registry_module: boostsecurityio/trivy-fs
+            #     api_endpoint: "https://api.dev.boostsec.io"
+            # - boost-security-scanner/scan:
+            #     registry_module: boostsecurityio/boost-sca
+            #     api_endpoint: "https://api.dev.boostsec.io"
