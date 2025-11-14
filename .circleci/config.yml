@@ -1,0 +1,49 @@
+version: 2.1
+
+executors:
+  default:
+    environment:
+      BUILDKIT_PROGRESS: plain
+      DOCKER_BUILDKIT: 1
+
+    machine:
+      docker_layer_caching: true
+      image: ubuntu-2204:2024.04.1
+
+orbs:
+  boost-security-scanner: boostsecurityio/scanner@4
+
+workflows:
+  version: 2
+  ci:
+    jobs:
+      - build-push:
+          context: [potato]
+
+jobs:
+  build-push:
+    executor: default
+    environment:
+      BOOST_SCANNER_REGISTRY_REPO: "https://github.com/boostsecurityio/dev-registry.git"
+    steps:
+      - checkout
+      - when:
+          condition:
+            or:
+              - equal: [ main, << pipeline.git.branch >> ]
+          steps:
+            - boost-security-scanner/scan:
+                registry_module: boostsecurityio/trivy-sbom-image
+                api_endpoint: "https://api.dev.boostsec.io"
+            - boost-security-scanner/scan:
+                registry_module: boostsecurityio/trivy-image
+                api_endpoint: "https://api.dev.boostsec.io"
+            - boost-security-scanner/scan:
+                registry_module: boostsecurityio/trivy-sbom
+                api_endpoint: "https://api.dev.boostsec.io"
+            - boost-security-scanner/scan:
+                registry_module: boostsecurityio/trivy-fs
+                api_endpoint: "https://api.dev.boostsec.io"
+            - boost-security-scanner/scan:
+                registry_module: boostsecurityio/boost-sca
+                api_endpoint: "https://api.dev.boostsec.io"
