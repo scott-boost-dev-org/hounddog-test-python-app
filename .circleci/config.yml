@@ -23,6 +23,8 @@ workflows:
 jobs:
   build-push:
     executor: default
+    environment:
+      BOOST_SCANNER_REGISTRY_REPO: "https://github.com/boostsecurityio/dev-registry.git"
     steps:
       - checkout
       - when:
@@ -33,25 +35,15 @@ jobs:
             - boost-security-scanner/scan:
                 registry_module: boostsecurityio/trivy-sbom-image
                 api_endpoint: "https://api.dev.boostsec.io"
-              environment:
-                BOOST_SCANNER_REGISTRY_REPO: "https://github.com/boostsecurityio/dev-registry.git"
             - boost-security-scanner/scan:
                 registry_module: boostsecurityio/trivy-image
                 api_endpoint: "https://api.dev.boostsec.io"
-              environment:
-                BOOST_SCANNER_REGISTRY_REPO: "https://github.com/boostsecurityio/dev-registry.git"
             - boost-security-scanner/scan:
                 registry_module: boostsecurityio/trivy-sbom
                 api_endpoint: "https://api.dev.boostsec.io"
-              environment:
-                BOOST_SCANNER_REGISTRY_REPO: "https://github.com/boostsecurityio/dev-registry.git"
             - boost-security-scanner/scan:
                 registry_module: boostsecurityio/trivy-fs
                 api_endpoint: "https://api.dev.boostsec.io"
-              environment:
-                BOOST_SCANNER_REGISTRY_REPO: "https://github.com/boostsecurityio/dev-registry.git"
             - boost-security-scanner/scan:
                 registry_module: boostsecurityio/boost-sca
                 api_endpoint: "https://api.dev.boostsec.io"
-              environment:
-                BOOST_SCANNER_REGISTRY_REPO: "https://github.com/boostsecurityio/dev-registry.git"
